@@ -19,7 +19,7 @@ Um proejto simples e elegante para criar, visualizar e organizar tarefas do dia 
 
 ## 🖼️ Preview
 
-![todo-preview](https://prnt.sc/10lcOAPTI-F-)
+![Layout](Screenshot_1.png)
 
 ---
 
