@@ -19,7 +19,9 @@ Um proejto simples e elegante para criar, visualizar e organizar tarefas do dia 
 
 ## 🖼️ Preview
 
-![Layout](Screenshot_1.png)
+<p align="center">
+  <img src="Screenshot_1.png" alt="Preview" width="500" />
+</p>
 
 ---
 
