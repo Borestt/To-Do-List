@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista Simples</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>📝Lista</h1>
+    <div class="input-group">
+      <input type="text" id="taskInput" placeholder="Digite uma nova tarefa..." />
+      <button onclick="addTask()">Adicionar</button>
+    </div>
+
+    <div class="filters">
+      <button onclick="setFilter('all')" class="active">Todas</button>
+      <button onclick="setFilter('pending')">Pendentes</button>
+      <button onclick="setFilter('completed')">Feitas</button>
+    </div>
+
+    <ul id="taskList"></ul>
+  </div>
+</body>
+</html>
