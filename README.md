@@ -1,6 +1,6 @@
 # 📝 To-Do List Simples
 
-Um proejto simples e elegante para criar, visualizar e organizar tarefas do dia a dia.
+Um projeto simples e elegante para criar, visualizar e organizar tarefas do dia a dia.
 
 ---
 
