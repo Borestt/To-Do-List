@@ -83,3 +83,11 @@ h1 {
 #taskList {
   list-style: none;
 }
+
+.info {
+  margin-top: 29px;
+  text-align: center;
+  color: #333;
+  font-size: 15px;
+  font-style: italic;
+}
