@@ -30,9 +30,9 @@ h1 {
 }
 
 .input-group {
-  display: flex;
   gap: 10px;
   margin-bottom: 20px;
+margin-left: 28px;
 }
 
 .input-group input {
@@ -44,11 +44,11 @@ h1 {
 }
 
 .input-group button {
-  background-color: #007bff;
+  background-color: #000000;
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
+  padding: 10px 160px;
+  border-radius: 60px;
   cursor: pointer;
   transition: background 0.3s ease;
 }

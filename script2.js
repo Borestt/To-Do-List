@@ -49,7 +49,17 @@ function renderTasks() {
     span.onclick = () => toggleComplete(index); // ao clicar na tarefa, alterna o status para concluida
 
     const delBtn = document.createElement("button"); 
-    delBtn.textContent = "❌";
+    const trashImg = document.createElement("img");
+    trashImg.src = "icons8-lixeira-50.png"; // coloque o caminho correto do PNG aqui
+    trashImg.alt = "Excluir";
+    trashImg.style.width = "18px";
+    trashImg.style.height = "18px";
+    trashImg.style.marginRight = "17px"
+
+    // Adiciona a imagem dentro do botão
+    delBtn.appendChild(trashImg);
+
+
     delBtn.style.background = "none";
     delBtn.style.border = "none";
     delBtn.style.cursor = "pointer";
@@ -84,3 +94,4 @@ function setFilter(filter) {
 
 // Inicialização
 renderTasks();
+

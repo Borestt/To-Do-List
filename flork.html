@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adicionar Tarefa</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>➕ Adicionar Nova Tarefa</h1>
+    <input type="text" id="newTaskInput" placeholder="Digite sua tarefa..." />
+    <button onclick="saveTask()">Salvar</button>
+    <br/><br/>
+    <a href="index.html">🔙 Voltar para a Lista</a>
+  </div>
+
+  <script>
+    function saveTask() {
+      const input = document.getElementById('newTaskInput');
+      const taskText = input.value.trim();
+      if (taskText) {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push({ text: taskText, completed: false }); // Use "completed" para ser compatível com script2.js
+  
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        window.location.href = 'index.html'; // redireciona após salvar
+      } else {
+        alert('Digite uma tarefa antes de salvar!');
+      }
+    }
+  </script>
+  
+</body>
+</html>
