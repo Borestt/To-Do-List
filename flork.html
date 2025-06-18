@@ -29,6 +29,11 @@
         alert('Digite uma tarefa antes de salvar!');
       }
     }
+     document.getElementById('newTaskInput').addEventListener('keyup', function (e) {
+    if (e.key === 'Enter') {
+      saveTask();
+    }
+  });
   </script>
   
 </body>
