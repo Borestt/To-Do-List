@@ -14,6 +14,9 @@ function addTask() { // adicionar a tarefa digitada
     renderTasks();
   }
 }
+taskInput.addEventListener("keyup", e => {
+  if (e.key === "Enter") addTask();
+});//adicionar tareffa com botao enter
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks)); // salva no localStorage, mesmo se atualizar a página ele continua lá
@@ -83,7 +86,13 @@ function deleteTask(index) {
   saveTasks(); // salva
   renderTasks(); // atualiza
 }
-
+function deleteTask(index) { 
+  if (confirm("Deseja realmente excluir esta tarefa?")) {
+    tasks.splice(index, 1);
+    saveTasks();
+    renderTasks();
+  }
+} //pedir confirmação para deletar
 function setFilter(filter) { 
   currentFilter = filter; // atualiza o filtro ao clicar em um dos botões
   filterButtons.forEach(btn => btn.classList.remove("active")); // para apenas um botão ficar azul, removendo o active dos outros
