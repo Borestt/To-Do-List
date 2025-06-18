@@ -50,7 +50,7 @@ function renderTasks() {
 
     const delBtn = document.createElement("button"); 
     const trashImg = document.createElement("img");
-    trashImg.src = "icons8-lixeira-50.png"; // coloque o caminho correto do PNG aqui
+    trashImg.src = "icons8-lixeira-50.png"; 
     trashImg.alt = "Excluir";
     trashImg.style.width = "18px";
     trashImg.style.height = "18px";
