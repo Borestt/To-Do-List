@@ -3,13 +3,155 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Adicionar Tarefa</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>ADICIONAR ATIVIDADE</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+      padding: 20px;
+    }
+    
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #000000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0026ff;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #3498db;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
+
+  <canvas id="hackCanvas" style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background: black;"></canvas>
+
+<script>
+  const canvas = document.getElementById('hackCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let points = [];
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const POINT_COUNT = 100;
+  for (let i = 0; i < POINT_COUNT; i++) {
+    points.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'white';  // cor dos pontos
+    ctx.strokeStyle = 'white'; // cor das linhas
+    ctx.lineWidth = 0.5;
+
+    points.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > width) p.vx = -p.vx;
+      if (p.y < 0 || p.y > height) p.vy = -p.vy;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    for (let i = 0; i < POINT_COUNT; i++) {
+      for (let j = i + 1; j < POINT_COUNT; j++) {
+        const dx = points[i].x - points[j].x;
+        const dy = points[i].y - points[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.globalAlpha = 1 - dist / 120;
+          ctx.moveTo(points[i].x, points[i].y);
+          ctx.lineTo(points[j].x, points[j].y);
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+</script>
+
   <div class="container">
     <h1>➕ Adicionar Nova Tarefa</h1>
     <input type="text" id="newTaskInput" placeholder="Digite sua tarefa..." />
+    <textarea id="taskDetails" placeholder="Adicione detalhes ou observações..."></textarea>
     <button onclick="saveTask()">Salvar</button>
     <br/><br/>
     <a href="index.html">🔙 Voltar para a Lista</a>
@@ -18,23 +160,30 @@
   <script>
     function saveTask() {
       const input = document.getElementById('newTaskInput');
+      const details = document.getElementById('taskDetails');
       const taskText = input.value.trim();
+      const taskDetails = details.value.trim();
+
       if (taskText) {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        tasks.push({ text: taskText, completed: false }); // Use "completed" para ser compatível com script2.js
-  
+        tasks.push({ 
+          text: taskText, 
+          details: taskDetails || "", 
+          completed: false 
+        });
+
         localStorage.setItem('tasks', JSON.stringify(tasks));
-        window.location.href = 'index.html'; // redireciona após salvar
+        window.location.href = 'index.html';
       } else {
         alert('Digite uma tarefa antes de salvar!');
       }
     }
-     document.getElementById('newTaskInput').addEventListener('keyup', function (e) {
-    if (e.key === 'Enter') {
-      saveTask();
-    }
-  });
+
+    document.getElementById('newTaskInput').addEventListener('keyup', function (e) {
+      if (e.key === 'Enter') {
+        saveTask();
+      }
+    });
   </script>
-  
 </body>
 </html>

@@ -2,105 +2,144 @@ const taskInput = document.getElementById("taskInput"); // digitar a tarefa
 const taskList = document.getElementById("taskList"); // exibir as tarefas
 const filterButtons = document.querySelectorAll(".filters button"); // os 3 botoes de filtro
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || []; // se nao tiver nada salvo, começa uma lista vazia
-let currentFilter = "all"; // começa em todas
+let tasks = JSON.parse(localStorage.getItem("tasks")) || []; // se não tiver nada salvo, começa vazio
+let currentFilter = "all"; // começa com todas
 
-function addTask() { // adicionar a tarefa digitada
-  const text = taskInput.value.trim(); // trim para tirar espaços extras
+function addTask() {
+  const text = taskInput.value.trim();
   if (text !== "") {
-    tasks.push({ text, completed: false }); // adiciona o texto como um objeto e false(pendente)
-    taskInput.value = ""; // limpa o campo
+    tasks.push({ text, completed: false });
+    taskInput.value = "";
     saveTasks();
     renderTasks();
   }
 }
+
 taskInput.addEventListener("keyup", e => {
   if (e.key === "Enter") addTask();
-});//adicionar tareffa com botao enter
+});
 
 function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks)); // salva no localStorage, mesmo se atualizar a página ele continua lá
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function deleteTask(index) {
+  if (confirm("Deseja realmente excluir esta tarefa?")) {
+    tasks.splice(index, 1);
+    saveTasks();
+    renderTasks();
+  }
+}
+
+function toggleComplete(index) {
+  tasks[index].completed = !tasks[index].completed;
+  saveTasks();
+  renderTasks();
+}
+
+function setFilter(filter) {
+  currentFilter = filter;
+  filterButtons.forEach(btn => btn.classList.remove("active"));
+  document.querySelector(`.filters button[onclick="setFilter('${filter}')"]`).classList.add("active");
+  renderTasks();
 }
 
 function renderTasks() {
-  taskList.innerHTML = ""; // limpa a tela
+  taskList.innerHTML = "";
 
-  // Amostragem das tarefas
   const filtered = tasks.filter(task => {
     if (currentFilter === "all") return true;
     if (currentFilter === "pendentes") return !task.completed;
     if (currentFilter === "completas") return task.completed;
   });
 
-  // um mini css nas tarefas aplicadas
   filtered.forEach((task, index) => {
     const li = document.createElement("li");
-    li.style.display = "flex";
-    li.style.justifyContent = "space-between";
-    li.style.alignItems = "center";
-    li.style.padding = "8px 0";
+    li.style.padding = "12px";
     li.style.borderBottom = "1px solid #ccc";
+    li.style.display = "flex";
+    li.style.flexDirection = "column";
+    li.style.gap = "6px";
 
+    // Topo da tarefa
+    const topRow = document.createElement("div");
+    topRow.style.display = "flex";
+    topRow.style.justifyContent = "space-between";
+    topRow.style.alignItems = "center";
+
+    // Texto da tarefa
     const span = document.createElement("span");
     span.textContent = task.text;
-    span.style.cursor = "pointer";
+    span.style.fontWeight = "bold";
+    span.style.cursor = "default";
     if (task.completed) {
       span.style.textDecoration = "line-through";
       span.style.color = "gray";
     }
 
-    span.onclick = () => toggleComplete(index); // ao clicar na tarefa, alterna o status para concluida
+    // Botão ✔️
+    const doneBtn = document.createElement("button");
+    doneBtn.textContent = "✔️";
+    doneBtn.title = task.completed ? "Marcar como pendente" : "Marcar como feita";
+    doneBtn.style.border = "none";
+    doneBtn.style.background = "none";
+    doneBtn.style.cursor = "pointer";
+    doneBtn.style.fontSize = "16px";
+    doneBtn.onclick = () => toggleComplete(index);
 
-    const delBtn = document.createElement("button"); 
+    // Botão 🔍
+    const detailBtn = document.createElement("button");
+    detailBtn.innerHTML = "🔍";
+    detailBtn.title = "Ver detalhes";
+    detailBtn.style.border = "none";
+    detailBtn.style.background = "none";
+    detailBtn.style.cursor = "pointer";
+    detailBtn.style.fontSize = "16px";
+
+    // Botão 🗑️
+    const delBtn = document.createElement("button");
     const trashImg = document.createElement("img");
-    trashImg.src = "icons8-lixeira-50.png"; 
+    trashImg.src = "icons8-lixeira-50.png";
     trashImg.alt = "Excluir";
     trashImg.style.width = "18px";
     trashImg.style.height = "18px";
-    trashImg.style.marginRight = "17px"
 
-    // Adiciona a imagem dentro do botão
     delBtn.appendChild(trashImg);
-
-
     delBtn.style.background = "none";
     delBtn.style.border = "none";
     delBtn.style.cursor = "pointer";
-    delBtn.onclick = () => deleteTask(index); // ao clicar no botão de deletar, remove a tarefa
+    delBtn.onclick = () => deleteTask(index);
 
-    li.appendChild(span);
-    li.appendChild(delBtn);
+    // Agrupar botões
+    const actions = document.createElement("div");
+    actions.style.display = "flex";
+    actions.style.alignItems = "center";
+    actions.style.gap = "10px";
+    actions.appendChild(doneBtn);
+    actions.appendChild(detailBtn);
+    actions.appendChild(delBtn);
+
+    // Monta a linha
+    topRow.appendChild(span);
+    topRow.appendChild(actions);
+    li.appendChild(topRow);
+
+    // Detalhes ocultos
+    const detail = document.createElement("div");
+    detail.textContent = task.details || "Sem detalhes.";
+    detail.style.fontSize = "0.9rem";
+    detail.style.color = "#555";
+    detail.style.marginTop = "4px";
+    detail.style.display = "none";
+
+    detailBtn.onclick = () => {
+      detail.style.display = detail.style.display === "none" ? "block" : "none";
+    };
+
+    li.appendChild(detail);
     taskList.appendChild(li);
   });
 }
 
-function toggleComplete(index) { // alterna o status da tarefa entre concluídas e pendentes
-  tasks[index].completed = !tasks[index].completed;
-  saveTasks(); // salva
-  renderTasks(); // atualiza
-}
-
-// Remove uma tarefa
-function deleteTask(index) { 
-  tasks.splice(index, 1); // remove a tarefa do array (1) como selecionado
-  saveTasks(); // salva
-  renderTasks(); // atualiza
-}
-function deleteTask(index) { 
-  if (confirm("Deseja realmente excluir esta tarefa?")) {
-    tasks.splice(index, 1);
-    saveTasks();
-    renderTasks();
-  }
-} //pedir confirmação para deletar
-function setFilter(filter) { 
-  currentFilter = filter; // atualiza o filtro ao clicar em um dos botões
-  filterButtons.forEach(btn => btn.classList.remove("active")); // para apenas um botão ficar azul, removendo o active dos outros
-  document.querySelector(`.filters button[onclick="setFilter('${filter}')"]`).classList.add("active");
-  // procura o botão que foi clicado e adiciona a classe active
-  renderTasks(); // atualiza
-}
-
-// Inicialização
+// Iniciar a renderização
 renderTasks();
-
