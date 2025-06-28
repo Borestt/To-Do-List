@@ -22,6 +22,18 @@
       }
     });
   </script>
+
+  <div class="sidebar">
+  <div class="user-profile">
+    <img src="https://via.placeholder.com/80" alt="Foto de Perfil" id="profilePic" class="profile-pic">
+    <input type="file" id="profilePicInput" style="display:none" accept="image/*" />
+    <h3 class="user-name">Olá, <span id="userName">Usuário</span>!</h3>
+    <p class="status">📚 <span id="pendingTasksCount">0</span> tarefas pendentes</p>
+    <button class="edit-profile" onclick="editUserName()">Editar Nome</button>
+    <button class="edit-profile" onclick="document.getElementById('profilePicInput').click()">Escolher Foto</button>
+    <button class="logout" onclick="logout()">Sair</button>
+  </div>
+</div>
   
   
   <canvas id="hackCanvas" style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background: black;"></canvas>
@@ -88,7 +100,23 @@
   }
 
   draw();
+  
 </script>
+<div id="logoutModal" style="display:none;">
+  <div id="logoutModalContent">
+    <p>Você saiu!</p>
+    <button onclick="closeLogoutModal()">OK</button>
+  </div>
+</div>
+
+<div id="editNameModal" style="display:none;">
+  <div id="editNameModalContent">
+    <p>Digite seu nome:</p>
+    <input type="text" id="newUserNameInput" placeholder="Seu nome" />
+    <button onclick="saveUserName()">Salvar</button>
+  </div>
+</div>
+
   <div class="container">
     <h1>📝Lista</h1>
     <div class="input-group">
@@ -104,5 +132,72 @@
     <p class="info">Clique no nome da atividade para marca-la como concluída</p>
   </div>
   <script src="script2.js"></script>
+
+  <script>
+  const userNameSpan = document.getElementById('userName');
+  const profilePic = document.getElementById('profilePic');
+  const profilePicInput = document.getElementById('profilePicInput');
+
+  let userName = localStorage.getItem('userName') || 'Usuário';
+  let profilePicData = localStorage.getItem('profilePic');
+
+  function updateUI() {
+    userNameSpan.textContent = userName;
+    if (profilePicData) {
+      profilePic.src = profilePicData;
+      profilePic.style.display = 'block';
+    } else {
+      profilePic.style.display = 'none';
+    }
+  }
+
+  updateUI();
+
+  function editUserName() {
+  document.getElementById('editNameModal').style.display = 'block';
+  document.getElementById('newUserNameInput').value = userName;
+}
+
+function saveUserName() {
+  const newName = document.getElementById('newUserNameInput').value.trim();
+  if (newName !== "") {
+    userName = newName;
+    localStorage.setItem("userName", userName);
+    updateUI();
+    document.getElementById('editNameModal').style.display = 'none';
+  }
+}
+
+
+  profilePicInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        profilePicData = e.target.result;
+        localStorage.setItem('profilePic', profilePicData);
+        updateUI();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function logout() {
+    localStorage.removeItem('userName');
+    localStorage.removeItem('profilePic');
+    localStorage.removeItem('pendingTasks');
+    localStorage.removeItem('tasks');
+    userName = 'Usuário';
+    profilePicData = null;
+    updateUI();
+    if (typeof renderTasks === 'function') renderTasks();
+    document.getElementById('logoutModal').style.display = 'block';
+  }
+
+  function closeLogoutModal() {
+    document.getElementById('logoutModal').style.display = 'none';
+  }
+</script>
+
 </body>
 </html>
