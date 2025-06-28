@@ -1,12 +1,9 @@
 const taskInput = document.getElementById("taskInput"); // digitar a tarefa
 const taskList = document.getElementById("taskList"); // exibir as tarefas
 const filterButtons = document.querySelectorAll(".filters button"); // os 3 botoes de filtro
-const profilePicInput = document.getElementById("profilePicInput");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || []; // se não tiver nada salvo, começa vazio
 let currentFilter = "all"; // começa com todas
-let userName = localStorage.getItem("userName") || "Usuário";
-let profilePicData = localStorage.getItem("profilePic");
 
 function addTask() {
   const text = taskInput.value.trim();
@@ -154,68 +151,9 @@ setPendingTasks(pendentes);
 
 }
 
-// Iniciar a renderização
-renderTasks();
-
-function updateUI() {
-  const userNameSpan = document.getElementById('userName');
-  const profilePic = document.getElementById('profilePic');
-  userNameSpan.textContent = userName;
-  if (profilePicData) {
-    profilePic.src = profilePicData;
-    profilePic.style.display = "block";
-  } else {
-    profilePic.style.display = "none";
-  }
-}
-
-function editUserName() {
-  document.getElementById('editNameModal').style.display = 'block';
-  document.getElementById('newUserNameInput').value = userName;
-}
-
-function saveUserName() {
-  const newName = document.getElementById('newUserNameInput').value.trim();
-  if (newName !== "") {
-    userName = newName;
-    localStorage.setItem("userName", userName);
-    updateUI();
-    document.getElementById('editNameModal').style.display = 'none';
-  }
-}
-
-profilePicInput.addEventListener('change', function() {
-  const file = this.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      profilePicData = e.target.result;
-      localStorage.setItem('profilePic', profilePicData);
-      updateUI();
-    }
-    reader.readAsDataURL(file);
-  }
-});
-
-function logout() {
-  localStorage.removeItem('userName');
-  localStorage.removeItem('profilePic');
-  localStorage.removeItem('pendingTasks');
-  localStorage.removeItem('tasks');
-  userName = 'Usuário';
-  profilePicData = null;
-  tasks = [];
-  currentFilter = 'all';
-  updateUI();
-  renderTasks();
-  document.getElementById('logoutModal').style.display = 'block';
-}
-
-function closeLogoutModal() {
-  document.getElementById('logoutModal').style.display = 'none';
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   updateUI();
+  // Iniciar a renderização
   renderTasks();
 });
