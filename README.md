@@ -20,8 +20,8 @@ Um projeto simples e elegante para criar, visualizar e organizar tarefas do dia 
 ## 🖼️ Preview
 
 <p>
-  <img src="Screenshot_1.png" alt="Preview" width="500" />
-  <img src="Screenshot_2.png" alt="Preview" width="500" />
+  <img src="img1.png" alt="Preview" width="500" />
+  <img src="img2.png" alt="Preview" width="500" />
 </p>
 
 ---
