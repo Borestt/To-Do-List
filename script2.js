@@ -67,13 +67,11 @@ function renderTasks() {
     li.style.flexDirection = "column";
     li.style.gap = "6px";
 
-    // Topo da tarefa
     const topRow = document.createElement("div");
     topRow.style.display = "flex";
     topRow.style.justifyContent = "space-between";
     topRow.style.alignItems = "center";
 
-    // Texto da tarefa
     const span = document.createElement("span");
     span.textContent = task.text;
     span.style.fontWeight = "bold";
@@ -83,7 +81,6 @@ function renderTasks() {
       span.style.color = "gray";
     }
 
-    // Botão ✔️
     const doneBtn = document.createElement("button");
     doneBtn.textContent = "✔️";
     doneBtn.title = task.completed ? "Marcar como pendente" : "Marcar como feita";
@@ -93,7 +90,6 @@ function renderTasks() {
     doneBtn.style.fontSize = "16px";
     doneBtn.onclick = () => toggleComplete(index);
 
-    // Botão 🔍
     const detailBtn = document.createElement("button");
     detailBtn.innerHTML = "🔍";
     detailBtn.title = "Ver detalhes";
@@ -102,7 +98,6 @@ function renderTasks() {
     detailBtn.style.cursor = "pointer";
     detailBtn.style.fontSize = "16px";
 
-    // Botão 🗑️
     const delBtn = document.createElement("button");
     const trashImg = document.createElement("img");
     trashImg.src = "icons8-lixeira-50.png";
@@ -116,7 +111,6 @@ function renderTasks() {
     delBtn.style.cursor = "pointer";
     delBtn.onclick = () => deleteTask(index);
 
-    // Agrupar botões
     const actions = document.createElement("div");
     actions.style.display = "flex";
     actions.style.alignItems = "center";
@@ -125,12 +119,10 @@ function renderTasks() {
     actions.appendChild(detailBtn);
     actions.appendChild(delBtn);
 
-    // Monta a linha
     topRow.appendChild(span);
     topRow.appendChild(actions);
     li.appendChild(topRow);
 
-    // Detalhes ocultos
     const detail = document.createElement("div");
     detail.textContent = task.details || "Sem detalhes.";
     detail.style.fontSize = "0.9rem";
@@ -154,6 +146,5 @@ setPendingTasks(pendentes);
 
 document.addEventListener("DOMContentLoaded", () => {
   updateUI();
-  // Iniciar a renderização
   renderTasks();
 });

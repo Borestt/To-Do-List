@@ -94,7 +94,6 @@ h1 {
   font-style: italic;
 }
 
-/* === Botão de tema === */
 .theme-button {
   position: fixed;
   top: 10px;
@@ -129,7 +128,6 @@ h1 {
   background: #222;
 }
 
-/* === Modo Escuro === */
 body.dark-mode {
   background: #000000;
   color: #f0f0f0;
